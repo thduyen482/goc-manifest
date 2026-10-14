@@ -469,13 +469,19 @@ document.addEventListener("keydown",e=>{ if($("#reader").style.display!=="flex")
 
 /* ================== TAB: SUBLIMINAL (2 bài của bạn, nằm trong thư mục "nhac") ================== */
 const TRACKS = [
-  {file:"Subliminal - Self Concept x Detachment.mp3", label:"SUBLIMINAL 𓆩 Self Concept × Detachment 𓆪"},
-  {file:"Subliminal CALM - Self Concept x Detachment.mp3", label:"SUBLIMINAL CALM 𓆩 Self Concept × Detachment 𓆪"}
+  {file:"Subliminal - Self Concept x Detachment.mp3", orig:"𝐒𝐔𝐁𝐋𝐈𝐌𝐈𝐍𝐀𝐋  𓆩 𝐒𝐄𝐋𝐅 𝐂𝐎𝐍𝐂𝐄𝐏𝐓 × 𝐃𝐄𝐓𝐀𝐂𝐇𝐌𝐄𝐍𝐓 𓆪 - whatiwant igoteverything.mp3", label:"SUBLIMINAL 𓆩 Self Concept × Detachment 𓆪"},
+  {file:"Subliminal CALM - Self Concept x Detachment.mp3", orig:"𝐒𝐔𝐁𝐋𝐈𝐌𝐈𝐍𝐀𝐋  𝐂𝐀𝐋𝐌 𓆩 𝐒𝐄𝐋𝐅 𝐂𝐎𝐍𝐂𝐄𝐏𝐓 × 𝐃𝐄𝐓𝐀𝐂𝐇𝐌𝐄𝐍𝐓 𓆪 - whatiwant igoteverything.mp3", label:"SUBLIMINAL CALM 𓆩 Self Concept × Detachment 𓆪"}
 ];
-let P={i:-1,mode:(S.set.pmode||"one"),sleep:null};
+/* Thử nhiều chỗ đặt file: thư mục "nhac" hoặc ngay cạnh file này, tên gọn hoặc tên gốc */
+function trackSrcs(t){
+  const names=[t.file, t.orig, t.orig.replace(/ {2,}/g," ")];
+  const out=[]; names.forEach(n=>{ out.push("nhac/"+encodeURIComponent(n)); out.push(encodeURIComponent(n)); });
+  return [...new Set(out)];
+}
+let P={i:-1,mode:(S.set.pmode||"one"),sleep:null,srcs:[],si:0};
 function playTrack(i){
-  const au=$("#libAudio"); P.i=i;
-  au.src="nhac/"+encodeURIComponent(TRACKS[i].file);
+  const au=$("#libAudio"); P.i=i; P.srcs=trackSrcs(TRACKS[i]); P.si=0;
+  au.src=P.srcs[0];
   au.loop = P.mode==="one";
   au.play().catch(()=>{});
   $("#pName").textContent="🎵 "+TRACKS[i].label;
@@ -485,7 +491,7 @@ function playTrack(i){
 (function(){
   const au=$("#libAudio");
   au.onended=()=>{ if(au.loop||P.i<0) return; playTrack((P.i+1)%TRACKS.length); };
-  au.onerror=()=>{ if(au.getAttribute("src")) toast("Không mở được file nhạc. Kiểm tra thư mục “nhac” còn nằm cạnh file công cụ không."); };
+  au.onerror=()=>{ if(!au.getAttribute("src")) return; if(P.si<P.srcs.length-1){ P.si++; au.src=P.srcs[P.si]; au.play().catch(()=>{}); return; } toast("Không tìm thấy file nhạc. Kiểm tra 2 bài nhạc đã được tải lên chưa."); };
   au.onpause=au.onplay=()=>{ if(tab==="sub") sub(); };
   $("#pStop").onclick=()=>{ au.pause(); au.removeAttribute("src"); au.load(); P.i=-1; clearTimeout(P.sleep); $("#pTimer").value="0"; $("#player").classList.add("hide"); document.body.classList.remove("playing"); if(tab==="sub") sub(); };
   $("#pTimer").onchange=e=>{ clearTimeout(P.sleep); const m=+e.target.value; if(m>0){ P.sleep=setTimeout(()=>{ au.pause(); $("#pTimer").value="0"; toast("Đã tắt nhạc theo hẹn giờ 🌙"); }, m*60000); toast("Nhạc sẽ tắt sau "+m+" phút"); } };
