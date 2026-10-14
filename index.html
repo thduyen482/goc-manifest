@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Góc Manifest Mỗi Ngày</title>
+<meta name="theme-color" content="#f3d9c8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Manifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌙%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#fbf6f1; --card:#ffffff; --ink:#3a2f2a; --muted:#8a7a70; --line:#efe3d8;
+  --accent:#c77d5a; --accent2:#8e6bbf; --soft:#f6ebe2; --ok:#5a9a6e; --warn:#c0553f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.55}
+header{background:linear-gradient(135deg,#f3d9c8,#e3d3f2);padding:18px 16px 12px}
+header h1{margin:0;font-size:22px}
+#coreLine{margin-top:6px;font-style:italic;color:#5b4560;font-size:17px;min-height:26px;transition:opacity .6s}
+nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:var(--soft);border-radius:999px;padding:7px 13px;font-size:15px;cursor:pointer;color:var(--ink)}
+nav button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:920px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 8px;font-size:19px}
+.card h3{margin:12px 0 6px;font-size:16px}
+.muted{color:var(--muted);font-size:14px}
+.big{font-size:22px;font-weight:600;color:#5b4560;text-align:center;padding:10px 4px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:none;background:var(--accent);color:#fff;border-radius:10px;padding:9px 15px;font-size:15px;cursor:pointer}
+.btn.alt{background:var(--accent2)}
+.btn.ghost{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:#fff;color:var(--warn);border:1px solid var(--warn)}
+.btn:disabled{opacity:.5;cursor:default}
+textarea,input[type=text],input[type=date],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:16px;font-family:inherit;background:#fffdfb;color:var(--ink)}
+textarea{min-height:180px;resize:vertical}
+.check{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px dashed var(--line);cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--ok)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.aff{display:flex;gap:8px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid var(--line)}
+.aff .t{flex:1}
+.ico{border:none;background:none;font-size:18px;cursor:pointer;padding:2px 4px}
+.day{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.day.today{border:2px solid var(--accent);background:#fff8f3}
+.day.done{opacity:.8}
+.day .hd{display:flex;justify-content:space-between;gap:8px;align-items:center;cursor:pointer}
+.pill{display:inline-block;background:var(--soft);border-radius:999px;padding:2px 10px;font-size:13px}
+.pill.ok{background:#e1f1e5;color:var(--ok)}
+.entry{border-bottom:1px solid var(--line);padding:10px 2px}
+.entry .meta{font-size:13px;color:var(--muted)}
+.entry .body{white-space:pre-wrap;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}.big{font-size:19px}}
+#reader{position:fixed;inset:0;background:linear-gradient(160deg,#2b2140,#5a3f5e 60%,#c77d5a);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;z-index:50;text-align:center}
+#reader .txt{font-size:clamp(24px,5vw,44px);font-weight:600;max-width:900px;line-height:1.35}
+#reader .ctl{position:absolute;bottom:24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#reader .cnt{position:absolute;top:18px;right:20px;opacity:.8}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#3a2f2a;color:#fff;padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .3s;z-index:60;pointer-events:none}
+.toast.show{opacity:1}
+.streak{font-size:28px;font-weight:700;color:var(--accent)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.cal div{aspect-ratio:1;border-radius:6px;background:var(--soft);font-size:11px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.cal div.l1{background:#f1d7c6;color:#7a4b33}.cal div.l2{background:#e3a98b;color:#fff}.cal div.l3{background:var(--accent);color:#fff}
+.hide{display:none}
+label.sm{font-size:14px;color:var(--muted);display:block;margin:8px 0 3px}
+#player{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.06);padding:8px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:40}
+#player.hide{display:none}
+#player audio{flex:1;min-width:0;width:100%;height:38px}
+@media (max-width:640px){#player{padding:8px 10px;gap:6px}#player #pName{width:100%;font-size:13px}#player select{flex:1}nav{position:static}}
+#player #pName{font-size:14px;font-weight:600;max-width:100%}
+body.playing main{padding-bottom:110px}
+.track{display:flex;gap:8px;align-items:center;padding:10px 6px;border-bottom:1px solid var(--line)}
+.track.on{background:#f3ecfa;border-radius:10px}
+.track .t{flex:1}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌙 Góc Manifest Mỗi Ngày</h1>
+  <div id="coreLine"></div>
+</header>
+<nav id="nav"></nav>
+<main id="app"></main>
+
+<div id="reader">
+  <div class="cnt" id="rCnt"></div>
+  <div class="txt" id="rTxt"></div>
+  <div class="ctl">
+    <button class="btn ghost" id="rPrev">◀ Trước</button>
+    <button class="btn" id="rPlay">⏸ Tạm dừng</button>
+    <button class="btn ghost" id="rNext">Sau ▶</button>
+    <button class="btn ghost" id="rVoice">🔊 Đọc to: tắt</button>
+    <button class="btn danger" id="rClose">✕ Thoát</button>
+  </div>
+</div>
+<div id="player" class="hide">
+  <span id="pName"></span>
+  <audio id="libAudio" controls></audio>
+  <select id="pTimer" title="Hẹn giờ tắt nhạc" style="width:auto">
+    <option value="0">Không hẹn giờ</option><option value="15">Tắt sau 15 phút</option><option value="30">Tắt sau 30 phút</option><option value="60">Tắt sau 1 tiếng</option><option value="120">Tắt sau 2 tiếng</option>
+  </select>
+  <button class="btn ghost" id="pStop">✕ Tắt nhạc</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================== NỘI DUNG SOẠN SẴN ================== */
+const CORE_DEFAULT = [
+  "Mình đã có điều mình muốn. I got what I want.",
+  "Không có gì là không thể với mình.",
+  "Mọi thứ luôn diễn ra theo hướng có lợi cho mình.",
+  "Mình đủ đầy, mình xứng đáng, mình được yêu thương.",
+  "Tiền bạc đến với mình dễ dàng và liên tục.",
+  "Mình thả lỏng, vì điều mình muốn đã là của mình.",
+  "Thế giới bên ngoài phản chiếu thế giới bên trong mình."
+];
+
+const AFF = {
+  "Tiền bạc": [
+    "Tiền đến với mình dễ dàng, nhẹ nhàng và thường xuyên.",
+    "Mình là thỏi nam châm hút tiền.",
+    "Mình luôn có nhiều hơn mức mình cần.",
+    "Thu nhập của mình tăng lên mỗi ngày.",
+    "Mình xứng đáng được giàu có.",
+    "Tiền yêu mình và mình yêu tiền.",
+    "Mình tiêu tiền trong niềm vui và tiền quay lại gấp nhiều lần.",
+    "Mình luôn được trả công xứng đáng cho giá trị mình mang lại.",
+    "Sự giàu có là trạng thái tự nhiên của mình.",
+    "Mình biết ơn mọi đồng tiền đang chảy vào cuộc sống của mình.",
+    "Tài khoản của mình luôn đầy đủ và dư dả.",
+    "Mình đã đạt được mục tiêu tài chính của mình."
+  ],
+  "Kinh doanh – bán hàng": [
+    "Khách hàng tìm đến mình mỗi ngày.",
+    "Sản phẩm của mình mang lại niềm vui cho mọi người, và mọi người sẵn lòng trả tiền cho nó.",
+    "Đơn hàng về đều đặn, nhẹ nhàng và tự nhiên.",
+    "Mình bán hàng bằng sự chân thành và khách hàng cảm nhận được điều đó.",
+    "Mỗi bài đăng của mình đều chạm đến đúng người cần nó.",
+    "Doanh thu của mình vượt mục tiêu một cách dễ dàng.",
+    "Khách cũ quay lại và giới thiệu thêm khách mới cho mình.",
+    "Mình đã đạt mục tiêu doanh thu trước Tết.",
+    "Công việc kinh doanh của mình phát triển bền vững.",
+    "Mình luôn có ý tưởng hay để bán hàng."
+  ],
+  "Yêu bản thân": [
+    "Mình yêu và chấp nhận bản thân trọn vẹn.",
+    "Mình đủ tốt, ngay lúc này.",
+    "Mình là ưu tiên của chính mình.",
+    "Mình tin vào bản thân mình.",
+    "Mình xinh đẹp, cả bên trong lẫn bên ngoài.",
+    "Mình cho phép bản thân được nghỉ ngơi.",
+    "Mình tự hào về con người mình đang trở thành.",
+    "Mình đối xử dịu dàng với chính mình.",
+    "Giá trị của mình không phụ thuộc vào ý kiến của người khác.",
+    "Mình là phiên bản tốt nhất của chính mình."
+  ],
+  "Bình an – thả lỏng": [
+    "Mình thả lỏng, mọi thứ đang được sắp xếp cho mình.",
+    "Mình buông bỏ những điều mình không kiểm soát được.",
+    "Mình an toàn, mình bình yên.",
+    "Mình thở vào bình an, thở ra lo lắng.",
+    "Không cần vội, điều tốt đẹp đang đến đúng lúc.",
+    "Mình không cần bằng chứng mới tin, mình tin nên mình thấy.",
+    "Tâm trí mình nhẹ nhàng và trong trẻo.",
+    "Mình chọn sự bình an thay vì sự lo âu.",
+    "Mọi chuyện rồi sẽ ổn, và thực ra đã ổn rồi.",
+    "Mình tha thứ cho bản thân và cho người khác."
+  ],
+  "Tình yêu – các mối quan hệ": [
+    "Mình được yêu thương vô điều kiện.",
+    "Mình thu hút những mối quan hệ lành mạnh và tử tế.",
+    "Những người xung quanh luôn ủng hộ mình.",
+    "Mình cho đi yêu thương và nhận lại yêu thương gấp bội.",
+    "Gia đình mình hạnh phúc, khỏe mạnh và bình an.",
+    "Mình xứng đáng với một tình yêu đẹp.",
+    "Mình là người được mọi người quý mến."
+  ],
+  "Sức khỏe – năng lượng": [
+    "Cơ thể mình khỏe mạnh và tràn đầy năng lượng.",
+    "Mình ngủ ngon và thức dậy sảng khoái.",
+    "Mỗi tế bào trong cơ thể mình đều khỏe mạnh.",
+    "Mình biết ơn cơ thể đã luôn đồng hành cùng mình.",
+    "Mình chọn ăn uống và sống lành mạnh vì mình yêu bản thân.",
+    "Năng lượng của mình cao và tích cực."
+  ],
+  "Viết lách – sáng tạo": [
+    "Mình viết dễ dàng, chữ nghĩa tuôn chảy tự nhiên.",
+    "Mỗi ngày mình viết hay hơn hôm qua.",
+    "Ý tưởng đến với mình liên tục.",
+    "Câu chữ của mình chạm đến trái tim người đọc.",
+    "Mình là người viết có phong cách riêng.",
+    "Mình tận hưởng từng phút được viết."
+  ]
+};
+
+const PROMPTS = {
+  "Nhật ký": [
+    "Hôm nay điều gì khiến bạn mỉm cười, dù chỉ một chút?",
+    "Kể lại một khoảnh khắc trong ngày mà bạn muốn nhớ mãi.",
+    "Hôm nay bạn đã làm tốt điều gì? Hãy khen chính mình thật cụ thể.",
+    "Điều gì đang chiếm nhiều suy nghĩ của bạn nhất lúc này?",
+    "Nếu ngày hôm nay là một màu, đó là màu gì và tại sao?",
+    "Bạn đã học được gì từ một người khác hôm nay?",
+    "Viết một lá thư ngắn cho bạn của 1 năm sau.",
+    "Viết một lá thư cho bạn của 5 năm trước.",
+    "Một nỗi sợ bạn đang có là gì? Nếu nó không còn, bạn sẽ làm gì?",
+    "Kể về một người bạn biết ơn và lý do."
+  ],
+  "Xả stress": [
+    "Viết hết ra mọi thứ đang làm bạn khó chịu. Không cần đúng chính tả, không cần hay.",
+    "Điều gì đang làm bạn mệt? Viết ra như đang kể với người bạn thân nhất.",
+    "Bạn đang giận ai hoặc điều gì? Cứ viết, không ai đọc đâu.",
+    "Liệt kê 10 thứ bạn muốn buông bỏ ngay hôm nay.",
+    "Cơ thể bạn đang cảm thấy thế nào? Căng ở đâu? Viết ra rồi hít thở sâu 3 lần.",
+    "Nếu nỗi lo này biết nói, nó sẽ nói gì? Và bạn trả lời nó ra sao?"
+  ],
+  "Biết ơn": [
+    "Viết 5 điều bạn biết ơn hôm nay, càng nhỏ càng tốt.",
+    "Biết ơn 3 điều về cơ thể của bạn.",
+    "Biết ơn 3 khách hàng / 3 người đã giúp bạn gần đây.",
+    "Biết ơn số tiền bạn đang có, và những gì nó đã mang lại cho bạn.",
+    "Biết ơn một khó khăn đã giúp bạn trưởng thành."
+  ],
+  "Luyện viết": [
+    "Tả lại món ăn bạn thích nhất sao cho người đọc thấy thèm (mùi, vị, màu, âm thanh).",
+    "Tả căn phòng bạn đang ngồi chỉ bằng 5 giác quan, mỗi giác quan 1 câu.",
+    "Viết một câu chuyện 100 chữ bắt đầu bằng: “Sáng hôm đó, điện thoại reo...”",
+    "Kể lại một kỷ niệm tuổi thơ như đang kể cho một đứa trẻ nghe.",
+    "Viết lại một câu bình thường theo 3 cách: vui, buồn, hài hước.",
+    "Viết đoạn văn thuyết phục một người bạn thử một thứ bạn yêu thích.",
+    "Viết một đoạn chỉ dùng câu ngắn dưới 8 chữ. Cảm nhận nhịp điệu.",
+    "Chọn 1 đồ vật quanh bạn và kể câu chuyện “cuộc đời” của nó.",
+    "Viết về hôm nay nhưng ở ngôi thứ ba, như nhân vật trong tiểu thuyết."
+  ],
+  "Scripting (viết như đã có)": [
+    "Viết như thể điều ước lớn nhất của bạn đã thành sự thật. Hôm nay bạn thức dậy thế nào?",
+    "Viết nhật ký của một ngày trong tương lai, khi bạn đã đạt mục tiêu tài chính.",
+    "Bạn đang ăn mừng điều gì? Ai ở bên cạnh? Bạn nói câu gì?",
+    "Viết tin nhắn bạn gửi cho người thân khi điều ước đã thành.",
+    "Viết “Mình thật biết ơn vì...” và kể về điều ước như đã xảy ra."
+  ]
+};
+
+const ROADMAP_DEFAULT = [
+  {t:"Ý thức – mọi thứ bắt đầu từ bên trong", m:"Bạn là người tạo ra trải nghiệm của mình. Hôm nay chỉ cần quan sát suy nghĩ của mình, không phán xét.", task:"Viết ra 10 suy nghĩ bạn hay có về tiền / về bản thân. Đánh dấu cái nào làm bạn thấy nặng nề.", a:"Mình là người tạo ra thực tại của mình.", q:"Mình đang tin điều gì về tiền và về chính mình?"},
+  {t:"Dọn dẹp niềm tin giới hạn", m:"Niềm tin cũ chỉ là thói quen suy nghĩ. Thói quen thì đổi được.", task:"Lấy danh sách hôm qua, viết lại mỗi câu nặng nề thành một câu khẳng định tích cực.", a:"Mình chọn những niềm tin mới nâng đỡ mình.", q:"Niềm tin nào mình sẵn sàng buông hôm nay?"},
+  {t:"Biết ơn những gì đang có", m:"Biết ơn là tần số của sự đủ đầy. Cảm thấy đủ thì sẽ có thêm.", task:"Viết 20 điều biết ơn. Cầm tiền trong tay và nói cảm ơn.", a:"Mình biết ơn, và cuộc sống cho mình thêm nhiều điều để biết ơn.", q:"Hôm nay mình biết ơn những gì?"},
+  {t:"Rõ ràng điều mình muốn", m:"Vũ trụ thích sự rõ ràng. Muốn gì, cụ thể đến đâu, cảm giác thế nào?", task:"Viết 3 điều ước cụ thể (con số, thời gian, cảm giác). Thêm vào mục “Ước mơ” ở tab Manifest.", a:"Mình biết rõ mình muốn gì và mình cho phép nó đến.", q:"Khi có được điều đó, mình sẽ cảm thấy thế nào?"},
+  {t:"Scripting – viết như đã có", m:"Viết ở thì hiện tại / quá khứ như thể mọi thứ đã xảy ra.", task:"Viết 1 trang nhật ký của “mình khi đã có điều ước”. Dùng chế độ Scripting ở tab Nhật ký.", a:"Mình đã có điều mình muốn.", q:"Một ngày của mình khi điều ước đã thành trông thế nào?"},
+  {t:"Cảm giác điều ước đã thành", m:"Cảm giác là ngôn ngữ của manifest. Trước khi ngủ là lúc tâm trí dễ tiếp nhận nhất.", task:"Trước khi ngủ, nhắm mắt tưởng tượng 1 cảnh nhỏ khi điều ước đã thành, lặp lại đến khi ngủ. Bật Subliminal hẹn giờ 30 phút.", a:"Mình cảm nhận được niềm vui của điều ước đã thành.", q:"Cảnh nhỏ nào khiến mình tin nhất là điều ước đã thành?"},
+  {t:"Thả lỏng – buông kiểm soát", m:"Điều mình muốn khó đến khi mình căng thẳng và sợ hãi. Thả lỏng chính là tin.", task:"Xả stress 10 phút ở tab Nhật ký. Sau đó đi dạo hoặc làm một việc mình thích mà không nghĩ về điều ước.", a:"Mình thả lỏng vì điều mình muốn đã là của mình.", q:"Mình đang cố kiểm soát điều gì? Mình có thể buông nó không?"},
+  {t:"Yêu bản thân – giá trị bản thân", m:"Bạn nhận được những gì bạn tin mình xứng đáng nhận.", task:"Viết 10 điều bạn yêu ở bản thân. Đọc to nhóm khẳng định “Yêu bản thân” 3 lần.", a:"Mình xứng đáng với mọi điều tốt đẹp.", q:"Mình sẽ đối xử với bản thân thế nào nếu mình thật sự tin mình xứng đáng?"},
+  {t:"Hành động được truyền cảm hứng", m:"Manifest không phải ngồi chờ. Là làm những việc nhẹ nhàng mà trực giác mách bảo.", task:"Làm 1 hành động nhỏ hướng về điều ước (đăng 1 bài bán hàng bằng năng lượng vui, nhắn 1 khách cũ, học 1 điều mới...).", a:"Mình hành động nhẹ nhàng và mọi cánh cửa mở ra.", q:"Trực giác đang mách mình làm điều gì?"},
+  {t:"Ghi nhận dấu hiệu & bằng chứng", m:"Điều bạn chú ý sẽ lớn lên. Hãy để ý những dấu hiệu nhỏ.", task:"Ghi ít nhất 3 “bằng chứng” vào mục Bằng chứng ở tab Manifest (một đơn hàng, một lời khen, một con số đẹp...).", a:"Mình nhìn thấy dấu hiệu ở khắp mọi nơi.", q:"Hôm nay có dấu hiệu nào cho thấy điều ước đang đến?"},
+  {t:"Kiên định – không phụ thuộc 3D", m:"Affirm để nhắc mình rằng nó đã là sự thật, chứ không phải để chờ đợi. 3D chậm hơn tâm trí một chút thôi.", task:"Làm 3-6-9 với câu khẳng định chính của bạn (tab Manifest). Đọc câu xuyên suốt mỗi khi thấy lo.", a:"Mình kiên định với thực tại mới của mình.", q:"Khi 3D chưa thay đổi, mình chọn tin vào điều gì?"},
+  {t:"Ăn mừng & bắt đầu vòng mới", m:"Ăn mừng như thể mọi thứ đã thành. Bạn đã đi hết 12 ngày, đó đã là một chiến thắng.", task:"Đọc lại nhật ký 12 ngày. Viết 1 lá thư cảm ơn vũ trụ. Tự thưởng cho mình một món nhỏ.", a:"Mình ăn mừng vì mình đã có điều mình muốn.", q:"Mình đã thay đổi thế nào sau 12 ngày?"}
+];
+
+const CHECKS = [
+  {k:"aff", t:"☀️ Đọc câu khẳng định buổi sáng"},
+  {k:"road", t:"🗺️ Làm bài tập của lộ trình hôm nay"},
+  {k:"jour", t:"✍️ Viết nhật ký / xả stress"},
+  {k:"sub", t:"🎧 Nghe subliminal"},
+  {k:"grat", t:"🌙 Biết ơn trước khi ngủ"}
+];
+
+/* ================== LƯU TRỮ (trên máy bạn) ================== */
+const KEY = "goc_manifest_v1";
+let S = load();
+function load(){
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ d = {}; }
+  return Object.assign({
+    start:null, checks:{}, roadDone:{}, journal:[], myAff:[], favs:[], core:CORE_DEFAULT.slice(),
+    roadmap:ROADMAP_DEFAULT.map(x=>Object.assign({},x)), goals:[], evidence:[], links:[], n369:{},
+    set:{voice:"", rate:0.9, vol:0.3, gap:6}
+  }, d);
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){ toast("Không lưu được! Hãy bấm Sao lưu để giữ dữ liệu."); } }
+
+/* ================== TIỆN ÍCH ================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function fmt(ds){ const [y,m,d]=ds.split("-"); return d+"/"+m+"/"+y; }
+function daysBetween(a,b){ return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000); }
+function seedNum(str){ let h=0; for(const c of str) h=(h*31+c.charCodeAt(0))>>>0; return h; }
+function pickDaily(arr, n, salt){ const out=[]; const a=arr.slice(); let h=seedNum(today()+(salt||"")); while(out.length<n && a.length){ h=(h*1103515245+12345)>>>0; out.push(a.splice(h%a.length,1)[0]); } return out; }
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2200); }
+function copy(txt){ navigator.clipboard.writeText(txt).then(()=>toast("Đã copy ✓")).catch(()=>{ const ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); toast("Đã copy ✓"); }); }
+function allAff(){ const list=[]; for(const c in AFF) AFF[c].forEach(t=>list.push({t,c})); S.myAff.forEach(t=>list.push({t,c:"Của tôi"})); return list; }
+function wc(s){ return (s.trim().match(/\S+/g)||[]).length; }
+function download(name, text, type){ const b=new Blob([text],{type:type||"text/plain;charset=utf-8"}); const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function roadDay(){ if(!S.start) return 0; const n=daysBetween(S.start,today())+1; return n; }
+function chk(k){ const d=today(); S.checks[d]=S.checks[d]||{}; S.checks[d][k]=true; save(); }
+
+/* ================== GIỌNG ĐỌC (trên máy) ================== */
+let voices=[];
+function loadVoices(){ voices = speechSynthesis.getVoices(); }
+if("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function viVoices(){ return voices.filter(v=>/^vi/i.test(v.lang)); }
+function pickVoice(){
+  const vs = voices; if(!vs.length) return null;
+  let v = vs.find(x=>x.voiceURI===S.set.voice); if(v) return v;
+  return viVoices().find(x=>x.localService) || viVoices()[0] || null;
+}
+function speak(text, vol, rate, onend){
+  if(!("speechSynthesis" in window)){ onend&&onend(); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  const v = pickVoice(); if(v){ u.voice=v; u.lang=v.lang; } else u.lang="vi-VN";
+  u.volume = vol==null?1:vol; u.rate = rate||S.set.rate;
+  u.onend = ()=>onend&&onend(); u.onerror = ()=>onend&&onend();
+  speechSynthesis.speak(u);
+}
+
+/* ================== DÒNG XUYÊN SUỐT Ở ĐẦU TRANG ================== */
+let coreIdx = seedNum(today()) % 7;
+function rotateCore(){
+  const el=$("#coreLine"); const list=S.core.length?S.core:CORE_DEFAULT;
+  el.style.opacity=0;
+  setTimeout(()=>{ el.textContent="✨ "+list[coreIdx%list.length]; el.style.opacity=1; coreIdx++; },600);
+}
+rotateCore(); setInterval(rotateCore, 12000);
+
+/* ================== ĐIỀU HƯỚNG ================== */
+const TABS = [
+  ["home","🏠 Hôm nay"],["aff","💬 Khẳng định"],["sub","🎧 Subliminal"],["jour","✍️ Nhật ký"],
+  ["man","✨ Manifest"],["road","🗺️ Lộ trình 12 ngày"],["data","💾 Sao lưu"]
+];
+let tab="home";
+function nav(){
+  $("#nav").innerHTML = TABS.map(([k,t])=>`<button class="${k===tab?"on":""}" data-t="${k}">${t}</button>`).join("");
+  $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{ tab=b.dataset.t; render(); window.scrollTo(0,0); });
+}
+function render(){ nav(); ({home,aff,sub,jour,man,road,data})[tab](); }
+
+/* ================== TAB: HÔM NAY ================== */
+function streak(){
+  let n=0; const d=new Date();
+  for(;;){ const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const c=S.checks[k]; const cnt=c?Object.values(c).filter(Boolean).length:0;
+    if(cnt>0) n++; else if(k!==today()) break;
+    d.setDate(d.getDate()-1); if(n>3650) break; }
+  return n;
+}
+function home(){
+  const d=today(); const c=S.checks[d]||{};
+  const dn=roadDay(); const r = (dn>=1&&dn<=12)? S.roadmap[dn-1] : null;
+  const daily = pickDaily(allAff(),5,"home");
+  const hour=new Date().getHours();
+  const hi = hour<11?"Chào buổi sáng ☀️":hour<18?"Chào buổi chiều 🌤️":"Chào buổi tối 🌙";
+  // lịch 28 ngày
+  let cal=""; for(let i=27;i>=0;i--){ const x=new Date(); x.setDate(x.getDate()-i); const k=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0"); const n=S.checks[k]?Object.values(S.checks[k]).filter(Boolean).length:0; cal+=`<div class="${n>=4?"l3":n>=2?"l2":n>=1?"l1":""}" title="${fmt(k)}: ${n}/5">${x.getDate()}</div>`; }
+  $("#app").innerHTML = `
+  <div class="card">
+    <h2>${hi} — ${fmt(d)}</h2>
+    <div class="big">“${esc((S.core.length?S.core:CORE_DEFAULT)[seedNum(d)%(S.core.length||7)])}”</div>
+    <div class="row" style="justify-content:center"><button class="btn" id="hRead">▶ Đọc 5 câu hôm nay (toàn màn hình)</button><button class="btn alt" id="hSub">🎧 Nghe subliminal</button></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Việc hôm nay</h2>
+      ${CHECKS.map(x=>`<label class="check"><input type="checkbox" data-k="${x.k}" ${c[x.k]?"checked":""}> ${x.t}</label>`).join("")}
+      <p class="muted">Ô sẽ tự tick khi bạn đọc câu khẳng định, nghe subliminal, lưu nhật ký... Bạn cũng có thể tự tick.</p>
+    </div>
+    <div class="card">
+      <h2>Chuỗi ngày</h2>
+      <div class="streak">🔥 ${streak()} ngày liên tiếp</div>
+      <div class="cal">${cal}</div>
+      <p class="muted">28 ngày gần nhất — càng đậm là làm càng nhiều việc.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🗺️ Lộ trình 12 ngày</h2>
+    ${ !S.start ? `<p>Bạn chưa bắt đầu lộ trình.</p><button class="btn" id="hStart">Bắt đầu Ngày 1 từ hôm nay</button>`
+      : r ? `<div class="pill">Ngày ${dn}/12</div> <b>${esc(r.t)}</b><p>${esc(r.m)}</p><p><b>Việc cần làm:</b> ${esc(r.task)}</p><p><b>Câu khẳng định của ngày:</b> <i>${esc(r.a)}</i></p><button class="btn ghost" id="hRoad">Xem chi tiết lộ trình</button>`
+      : `<p>Bạn đã đi hết 12 ngày (bắt đầu ${fmt(S.start)}) 🎉</p><button class="btn ghost" id="hRoad">Xem lại / bắt đầu vòng mới</button>` }
+  </div>
+  <div class="card">
+    <h2>💬 5 câu khẳng định hôm nay</h2>
+    ${daily.map(x=>`<div class="aff"><span class="t">${esc(x.t)}</span><button class="ico" title="Đọc to" data-say="${esc(x.t)}">🔊</button></div>`).join("")}
+    <p class="muted">Mỗi ngày tự đổi bộ câu mới. Muốn thêm câu của riêng bạn → tab Khẳng định.</p>
+  </div>`;
+  $("#app").querySelectorAll(".check input").forEach(i=>i.onchange=()=>{ S.checks[d]=S.checks[d]||{}; S.checks[d][i.dataset.k]=i.checked; save(); home(); });
+  $("#hRead").onclick=()=>{ openReader(daily.map(x=>x.t)); chk("aff"); };
+  $("#hSub").onclick=()=>{ tab="sub"; render(); };
+  $("#app").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say,1));
+  if($("#hStart")) $("#hStart").onclick=()=>{ S.start=today(); save(); toast("Bắt đầu Ngày 1 ✨"); home(); };
+  if($("#hRoad")) $("#hRoad").onclick=()=>{ tab="road"; render(); };
+}
+
+/* ================== TAB: KHẲNG ĐỊNH ================== */
+let affCat="Câu xuyên suốt";
+function affList(cat){
+  if(cat==="Câu xuyên suốt") return S.core.slice();
+  if(cat==="Yêu thích") return S.favs.slice();
+  if(cat==="Của tôi") return S.myAff.slice();
+  return (AFF[cat]||[]).slice();
+}
+function aff(){
+  const cats=["Câu xuyên suốt","Yêu thích","Của tôi",...Object.keys(AFF)];
+  const list=affList(affCat);
+  const editable = affCat==="Câu xuyên suốt"||affCat==="Của tôi";
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>💬 Câu khẳng định</h2>
+    <p class="muted">“Câu xuyên suốt” là những câu chạy liên tục ở đầu trang mỗi ngày — bạn sửa được. Bấm ♡ để đưa câu vào Yêu thích.</p>
+    <div class="chips">${cats.map(c=>`<span class="chip ${c===affCat?"on":""}" data-c="${esc(c)}">${esc(c)}</span>`).join("")}</div>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn" id="aRead" ${list.length?"":"disabled"}>▶ Đọc nhóm này toàn màn hình</button>
+      <button class="btn ghost" id="aCopy" ${list.length?"":"disabled"}>📋 Copy cả nhóm</button>
+    </div>
+    <div id="aList">${list.length? list.map((t,i)=>`<div class="aff"><span class="t">${esc(t)}</span>
+      <button class="ico" data-say="${i}" title="Đọc to">🔊</button>
+      <button class="ico" data-fav="${i}" title="Yêu thích">${S.favs.includes(t)?"♥":"♡"}</button>
+      <button class="ico" data-cp="${i}" title="Copy">📋</button>
+      ${editable||affCat==="Yêu thích"?`<button class="ico" data-del="${i}" title="Bỏ câu này">🗑️</button>`:""}</div>`).join("")
+      : `<p class="muted">Chưa có câu nào ở nhóm này.</p>`}</div>
+    ${ editable ? `<h3>Thêm câu mới vào “${esc(affCat)}”</h3><div class="row"><input type="text" id="aNew" placeholder="Ví dụ: Mình đã đạt 500 triệu doanh thu trước Tết." style="flex:1"><button class="btn" id="aAdd">Thêm</button></div>
+       ${affCat==="Câu xuyên suốt"?`<p class="muted" style="margin-top:8px"><button class="btn ghost" id="aReset">Khôi phục câu xuyên suốt mặc định</button></p>`:""}` : `<p class="muted">Muốn viết câu riêng? Chọn nhóm “Của tôi” hoặc “Câu xuyên suốt”.</p>` }
+  </div>
+  <div class="card">
+    <h2>📝 Cách viết câu khẳng định hiệu quả</h2>
+    <ul>
+      <li>Dùng thì hiện tại, như thể đã có: “Mình <b>đang có</b>…”, “Mình <b>đã</b>…” (không dùng “sẽ”).</li>
+      <li>Câu tích cực: nói điều mình muốn, không nói điều mình sợ (“Mình khỏe mạnh” thay vì “Mình không ốm”).</li>
+      <li>Ngắn, dễ nhớ, đọc lên thấy dễ chịu. Nếu đọc thấy “cấn”, sửa nhẹ lại cho tin được.</li>
+      <li>Affirm là để <b>nhắc mình rằng điều đó đã là thật</b>, không phải để ngồi chờ 3D thay đổi.</li>
+    </ul>
+  </div>`;
+  $("#app").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ affCat=c.dataset.c; aff(); });
+  $("#aRead") && ($("#aRead").onclick=()=>{ openReader(list); chk("aff"); });
+  $("#aCopy") && ($("#aCopy").onclick=()=>copy(list.join("\n")));
+  $("#app").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(list[b.dataset.say],1));
+  $("#app").querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>copy(list[b.dataset.cp]));
+  $("#app").querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{ const t=list[b.dataset.fav]; const i=S.favs.indexOf(t); if(i>=0) S.favs.splice(i,1); else S.favs.push(t); save(); aff(); });
+  $("#app").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    const t=list[b.dataset.del]; if(!confirm("Bỏ câu này khỏi nhóm “"+affCat+"”?\n\n"+t)) return;
+    const arr = affCat==="Câu xuyên suốt"?S.core: affCat==="Của tôi"?S.myAff:S.favs;
+    arr.splice(arr.indexOf(t),1); save(); aff(); });
+  if($("#aAdd")){ const add=()=>{ const v=$("#aNew").value.trim(); if(!v) return; (affCat==="Câu xuyên suốt"?S.core:S.myAff).push(v); save(); aff(); toast("Đã thêm ✓"); };
+    $("#aAdd").onclick=add; $("#aNew").onkeydown=e=>{ if(e.key==="Enter") add(); }; }
+  if($("#aReset")) $("#aReset").onclick=()=>{ if(confirm("Thay danh sách câu xuyên suốt hiện tại bằng bộ mặc định?")){ S.core=CORE_DEFAULT.slice(); save(); aff(); } };
+}
+
+/* ================== CHẾ ĐỘ ĐỌC TOÀN MÀN HÌNH ================== */
+let R={list:[],i:0,play:true,voice:false,timer:null,rounds:0};
+function openReader(list){
+  if(!list.length) return;
+  R={list,i:0,play:true,voice:false,timer:null,rounds:0};
+  $("#reader").style.display="flex"; showR(); schedule();
+}
+function showR(){ $("#rTxt").textContent=R.list[R.i]; $("#rCnt").textContent=(R.i+1)+" / "+R.list.length+(R.rounds?"  •  vòng "+(R.rounds+1):""); $("#rPlay").textContent=R.play?"⏸ Tạm dừng":"▶ Chạy tiếp"; $("#rVoice").textContent="🔊 Đọc to: "+(R.voice?"bật":"tắt"); }
+function stepR(d){ R.i+=d; if(R.i>=R.list.length){ R.i=0; R.rounds++; } if(R.i<0) R.i=R.list.length-1; showR(); }
+function schedule(){
+  clearTimeout(R.timer); if(!R.play) return;
+  if(R.voice){ speechSynthesis.cancel(); speak(R.list[R.i],1,S.set.rate,()=>{ if(R.play&&$("#reader").style.display==="flex"){ R.timer=setTimeout(()=>{ stepR(1); schedule(); },1500);} }); }
+  else R.timer=setTimeout(()=>{ stepR(1); schedule(); }, (S.set.gap||6)*1000);
+}
+$("#rPrev").onclick=()=>{ stepR(-1); schedule(); };
+$("#rNext").onclick=()=>{ stepR(1); schedule(); };
+$("#rPlay").onclick=()=>{ R.play=!R.play; if(!R.play){ clearTimeout(R.timer); speechSynthesis.cancel(); } showR(); schedule(); };
+$("#rVoice").onclick=()=>{ R.voice=!R.voice; speechSynthesis.cancel(); showR(); schedule(); };
+$("#rClose").onclick=()=>{ clearTimeout(R.timer); speechSynthesis.cancel(); $("#reader").style.display="none"; if(tab==="home") home(); };
+document.addEventListener("keydown",e=>{ if($("#reader").style.display!=="flex") return; if(e.key==="Escape") $("#rClose").click(); if(e.key==="ArrowRight") $("#rNext").click(); if(e.key==="ArrowLeft") $("#rPrev").click(); if(e.key===" "){ e.preventDefault(); $("#rPlay").click(); } });
+
+/* ================== TAB: SUBLIMINAL (2 bài của bạn, nằm trong thư mục "nhac") ================== */
+const TRACKS = [
+  {file:"Subliminal - Self Concept x Detachment.mp3", label:"SUBLIMINAL 𓆩 Self Concept × Detachment 𓆪"},
+  {file:"Subliminal CALM - Self Concept x Detachment.mp3", label:"SUBLIMINAL CALM 𓆩 Self Concept × Detachment 𓆪"}
+];
+let P={i:-1,mode:(S.set.pmode||"one"),sleep:null};
+function playTrack(i){
+  const au=$("#libAudio"); P.i=i;
+  au.src="nhac/"+encodeURIComponent(TRACKS[i].file);
+  au.loop = P.mode==="one";
+  au.play().catch(()=>{});
+  $("#pName").textContent="🎵 "+TRACKS[i].label;
+  $("#player").classList.remove("hide"); document.body.classList.add("playing");
+  chk("sub"); if(tab==="sub") sub();
+}
+(function(){
+  const au=$("#libAudio");
+  au.onended=()=>{ if(au.loop||P.i<0) return; playTrack((P.i+1)%TRACKS.length); };
+  au.onerror=()=>{ if(au.getAttribute("src")) toast("Không mở được file nhạc. Kiểm tra thư mục “nhac” còn nằm cạnh file công cụ không."); };
+  au.onpause=au.onplay=()=>{ if(tab==="sub") sub(); };
+  $("#pStop").onclick=()=>{ au.pause(); au.removeAttribute("src"); au.load(); P.i=-1; clearTimeout(P.sleep); $("#pTimer").value="0"; $("#player").classList.add("hide"); document.body.classList.remove("playing"); if(tab==="sub") sub(); };
+  $("#pTimer").onchange=e=>{ clearTimeout(P.sleep); const m=+e.target.value; if(m>0){ P.sleep=setTimeout(()=>{ au.pause(); $("#pTimer").value="0"; toast("Đã tắt nhạc theo hẹn giờ 🌙"); }, m*60000); toast("Nhạc sẽ tắt sau "+m+" phút"); } };
+})();
+
+function sub(){
+  const au=$("#libAudio");
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>🎧 Subliminal của bạn</h2>
+    <p class="muted">Bấm ▶ để nghe. Nhạc phát ở thanh dưới đáy màn hình, nên bạn chuyển qua viết nhật ký hay đọc khẳng định vẫn nghe tiếp được.</p>
+    ${TRACKS.map((t,i)=>`<div class="track ${P.i===i?"on":""}"><button class="btn ${P.i===i?"alt":""}" data-pl="${i}">${P.i===i&&!au.paused?"⏸":"▶"}</button><span class="t">${esc(t.label)}</span></div>`).join("")}
+    <div class="row" style="margin-top:12px">
+      <label class="sm" style="margin:0">Khi hết bài:</label>
+      <select id="pMode" style="width:auto"><option value="one" ${P.mode==="one"?"selected":""}>Lặp lại bài đó</option><option value="all" ${P.mode==="all"?"selected":""}>Chuyển sang bài còn lại</option></select>
+    </div>
+    <p class="muted" style="margin-top:10px">Mẹo: trước khi ngủ, bấm ▶ rồi chọn “Tắt sau 30 phút” ở thanh dưới đáy.</p>
+  </div>`;
+  $("#app").querySelectorAll("[data-pl]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.pl; if(P.i===i){ if(au.paused) au.play(); else au.pause(); return; } playTrack(i); });
+  $("#pMode").onchange=e=>{ P.mode=e.target.value; S.set.pmode=P.mode; save(); au.loop = P.mode==="one"; };
+}
+
+/* ================== TAB: NHẬT KÝ ================== */
+let jMode="Nhật ký", jPrompt=null, jTimer=null, jEnd=0, jSearch="";
+function jour(){
+  const prompts=PROMPTS[jMode];
+  if(jPrompt===null || !prompts.includes(jPrompt)){ const dn=roadDay(); jPrompt = (jMode==="Nhật ký" && dn>=1 && dn<=12) ? S.roadmap[dn-1].q : pickDaily(prompts,1,jMode)[0]; }
+  const draft = sessionDraft();
+  const entries = S.journal.filter(e=>!jSearch || (e.text+e.type+e.date).toLowerCase().includes(jSearch.toLowerCase())).slice().reverse();
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>✍️ Viết nhật ký</h2>
+    <div class="chips">${Object.keys(PROMPTS).map(m=>`<span class="chip ${m===jMode?"on":""}" data-m="${esc(m)}">${esc(m)}</span>`).join("")}</div>
+    <div class="card" style="background:var(--soft);margin:8px 0">
+      <b>Gợi ý:</b> ${esc(jPrompt)}
+      <div class="row" style="margin-top:8px"><button class="btn ghost" id="jNewP">🔄 Đổi gợi ý khác</button></div>
+    </div>
+    ${jMode==="Xả stress"?`<p class="muted">Viết hết ra, không cần hay. Viết xong bạn có thể <b>Lưu</b> lại, hoặc bấm <b>“Thả nó đi”</b> để xóa trang này mà không lưu (sẽ hỏi lại trước khi xóa).</p>`:""}
+    <textarea id="jText" placeholder="Bắt đầu viết ở đây...">${esc(draft)}</textarea>
+    <div class="row" style="margin-top:8px;justify-content:space-between">
+      <span class="muted" id="jWc">${wc(draft)} chữ</span>
+      <span class="row">
+        <button class="btn ghost" id="jTimer">⏱️ ${jTimer?"Dừng hẹn giờ":"Viết tự do 10 phút"}</button>
+        <span class="muted" id="jLeft"></span>
+      </span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="jSave">💾 Lưu bài viết</button>
+      <button class="btn ghost" id="jCopy">📋 Copy</button>
+      ${jMode==="Xả stress"?`<button class="btn danger" id="jBurn">🔥 Thả nó đi (không lưu)</button>`:""}
+    </div>
+    <p class="muted">Bài đang viết dở được tự giữ lại nếu bạn lỡ chuyển tab.</p>
+  </div>
+  <div class="card">
+    <h2>📚 Nhật ký đã viết (${S.journal.length} bài)</h2>
+    <div class="row"><input type="text" id="jSearch" placeholder="Tìm trong nhật ký..." value="${esc(jSearch)}" style="flex:1"><button class="btn ghost" id="jExport">⬇️ Tải tất cả về máy (.txt)</button></div>
+    <div id="jList">${entries.slice(0,60).map(e=>`<div class="entry"><div class="meta">${fmt(e.date)} ${e.time||""} • ${esc(e.type)} • ${wc(e.text)} chữ <button class="ico" data-jc="${e.id}" title="Copy">📋</button><button class="ico" data-jd="${e.id}" title="Xóa">🗑️</button></div>${e.prompt?`<div class="muted">Gợi ý: ${esc(e.prompt)}</div>`:""}<div class="body">${esc(e.text)}</div></div>`).join("") || `<p class="muted">Chưa có bài nào.</p>`}</div>
+  </div>
+  <div class="card">
+    <h2>💡 Mẹo luyện viết mỗi ngày</h2>
+    <ul class="muted">
+      <li>Viết đều đặn quan trọng hơn viết hay. 10 phút mỗi ngày là đủ.</li>
+      <li>Khi hẹn giờ 10 phút: không xóa, không sửa, cứ viết liên tục.</li>
+      <li>Mỗi tuần đọc lại 1 lần, gạch chân câu bạn thấy hay — đó là “giọng văn” của bạn.</li>
+      <li>Chế độ “Luyện viết” giúp tả cảm giác, mùi vị — rất hợp để viết bài bán hàng hấp dẫn hơn.</li>
+    </ul>
+  </div>`;
+  const ta=$("#jText");
+  ta.oninput=()=>{ $("#jWc").textContent=wc(ta.value)+" chữ"; try{ sessionStorage.setItem("jdraft",ta.value); }catch(e){} };
+  $("#app").querySelectorAll("[data-m]").forEach(c=>c.onclick=()=>{ jMode=c.dataset.m; jPrompt=null; jour(); });
+  $("#jNewP").onclick=()=>{ const p=PROMPTS[jMode].filter(x=>x!==jPrompt); jPrompt=p[Math.floor(Math.random()*p.length)]||jPrompt; jour(); };
+  $("#jTimer").onclick=()=>{ if(jTimer){ clearInterval(jTimer); jTimer=null; jour(); return; } jEnd=Date.now()+600000; jTimer=setInterval(jTick,1000); jour(); };
+  jTick();
+  $("#jSave").onclick=()=>{ const t=ta.value.trim(); if(!t){ toast("Chưa có chữ nào"); return; }
+    const d=new Date(); S.journal.push({id:Date.now(), date:today(), time:String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"), type:jMode, prompt:jPrompt, text:t});
+    chk("jour"); if(jMode==="Biết ơn") chk("grat"); save(); try{sessionStorage.removeItem("jdraft");}catch(e){} toast("Đã lưu ✓ — "+wc(t)+" chữ"); jour(); };
+  $("#jCopy").onclick=()=>copy(ta.value);
+  if($("#jBurn")) $("#jBurn").onclick=()=>{ if(!ta.value.trim()) return; if(!confirm("Xóa trang đang viết mà KHÔNG lưu lại?\n(Những gì bạn vừa viết sẽ biến mất hẳn.)")) return; ta.value=""; try{sessionStorage.removeItem("jdraft");}catch(e){} chk("jour"); toast("Đã thả đi 🍃 Hít thở sâu nhé."); jour(); };
+  $("#jSearch").oninput=e=>{ jSearch=e.target.value; const pos=e.target.selectionStart; jour(); const s=$("#jSearch"); s.focus(); s.setSelectionRange(pos,pos); };
+  $("#jExport").onclick=()=>{ if(!S.journal.length){ toast("Chưa có bài nào"); return; } download("nhat-ky-manifest-"+today()+".txt", S.journal.map(e=>`===== ${fmt(e.date)} ${e.time||""} • ${e.type} =====\n${e.prompt?"Gợi ý: "+e.prompt+"\n":""}\n${e.text}\n`).join("\n")); };
+  $("#app").querySelectorAll("[data-jc]").forEach(b=>b.onclick=()=>copy(S.journal.find(e=>e.id==b.dataset.jc).text));
+  $("#app").querySelectorAll("[data-jd]").forEach(b=>b.onclick=()=>{ const e=S.journal.find(x=>x.id==b.dataset.jd); if(confirm("Xóa vĩnh viễn bài nhật ký ngày "+fmt(e.date)+"?\n\n"+e.text.slice(0,120)+"...")){ S.journal=S.journal.filter(x=>x!==e); save(); jour(); } });
+}
+function sessionDraft(){ try{ return sessionStorage.getItem("jdraft")||""; }catch(e){ return ""; } }
+function jTick(){ const el=$("#jLeft"); if(!jTimer){ if(el) el.textContent=""; return; } const s=Math.max(0,Math.round((jEnd-Date.now())/1000)); if(el) el.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); if(s<=0){ clearInterval(jTimer); jTimer=null; toast("Hết 10 phút! Giỏi lắm 🎉"); if(tab==="jour"){ const v=$("#jText")&&$("#jText").value; jour(); } } }
+
+/* ================== TAB: MANIFEST ================== */
+function man(){
+  const d=today(); const n=S.n369[d]||{aff:(S.core[0]||CORE_DEFAULT[0]),m:["","",""],a:["","","","","",""],e:["","","","","","","","",""]};
+  S.n369[d]=n;
+  const block=(key,label,cnt)=>`<h3>${label}</h3>${n[key].map((v,i)=>`<input type="text" data-k="${key}" data-i="${i}" value="${esc(v)}" placeholder="Lần ${i+1}" style="margin-bottom:5px">`).join("")}`;
+  const done369 = ["m","a","e"].map(k=>n[k].filter(x=>x.trim()).length);
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>🌠 Ước mơ của tôi</h2>
+    <p class="muted">Viết cụ thể, ở thì hiện tại như đã có. Ví dụ: “Mình đã đạt 500 triệu doanh thu trước Tết 2027.” Khi thành sự thật thì tick ✓.</p>
+    <div class="row"><input type="text" id="gNew" placeholder="Điều ước của bạn..." style="flex:1"><button class="btn" id="gAdd">Thêm</button></div>
+    <div style="margin-top:8px">${S.goals.map((g,i)=>`<div class="aff"><input type="checkbox" data-gc="${i}" ${g.done?"checked":""} style="width:20px;height:20px"><span class="t" style="${g.done?"text-decoration:line-through;color:var(--ok)":""}">${esc(g.t)} <span class="muted">(${fmt(g.d)})</span></span><button class="ico" data-gs="${i}" title="Đọc to">🔊</button><button class="ico" data-gd="${i}" title="Xóa">🗑️</button></div>`).join("") || `<p class="muted">Chưa có điều ước nào.</p>`}</div>
+    ${S.goals.length?`<div class="row" style="margin-top:8px"><button class="btn alt" id="gRead">▶ Đọc ước mơ toàn màn hình</button></div>`:""}
+  </div>
+  <div class="card">
+    <h2>3️⃣6️⃣9️⃣ Phương pháp 3-6-9 hôm nay</h2>
+    <p class="muted">Chọn 1 câu khẳng định. Sáng viết 3 lần, trưa 6 lần, tối 9 lần. Vừa viết vừa cảm nhận như điều đó đã thật.</p>
+    <label class="sm">Câu của hôm nay</label>
+    <input type="text" id="n369aff" value="${esc(n.aff)}">
+    <div class="row" style="margin:8px 0"><button class="btn ghost" id="nFill">Chép câu vào ô đầu tiên còn trống</button><span class="muted">Đã viết: sáng ${done369[0]}/3 • trưa ${done369[1]}/6 • tối ${done369[2]}/9</span></div>
+    <div class="grid2"><div>${block("m","☀️ Sáng – 3 lần")}${block("a","🌤️ Trưa – 6 lần")}</div><div>${block("e","🌙 Tối – 9 lần")}</div></div>
+  </div>
+  <div class="card">
+    <h2>🔎 Bằng chứng 3D (dấu hiệu nhỏ)</h2>
+    <p class="muted">Ghi lại mọi dấu hiệu nhỏ: một đơn hàng bất ngờ, một lời khen, nhặt được tiền, gặp số đẹp... Điều bạn chú ý sẽ lớn lên.</p>
+    <div class="row"><input type="text" id="eNew" placeholder="Hôm nay mình thấy..." style="flex:1"><button class="btn" id="eAdd">Ghi lại</button></div>
+    <div style="margin-top:8px">${S.evidence.slice().reverse().map(e=>`<div class="aff"><span class="pill ok">${fmt(e.d)}</span><span class="t">${esc(e.t)}</span><button class="ico" data-ed="${e.id}">🗑️</button></div>`).join("") || `<p class="muted">Chưa có bằng chứng nào — sẽ có sớm thôi ✨</p>`}</div>
+  </div>`;
+  const addG=()=>{ const v=$("#gNew").value.trim(); if(!v) return; S.goals.push({t:v,d:today(),done:false}); save(); man(); };
+  $("#gAdd").onclick=addG; $("#gNew").onkeydown=e=>{ if(e.key==="Enter") addG(); };
+  $("#app").querySelectorAll("[data-gc]").forEach(c=>c.onchange=()=>{ S.goals[c.dataset.gc].done=c.checked; save(); if(c.checked) toast("Chúc mừng! 🎉 Ghi lại vào Bằng chứng nhé"); man(); });
+  $("#app").querySelectorAll("[data-gs]").forEach(b=>b.onclick=()=>speak(S.goals[b.dataset.gs].t,1));
+  $("#app").querySelectorAll("[data-gd]").forEach(b=>b.onclick=()=>{ if(confirm("Xóa điều ước này?\n\n"+S.goals[b.dataset.gd].t)){ S.goals.splice(+b.dataset.gd,1); save(); man(); } });
+  if($("#gRead")) $("#gRead").onclick=()=>openReader(S.goals.map(g=>g.t));
+  $("#n369aff").oninput=e=>{ n.aff=e.target.value; save(); };
+  $("#app").querySelectorAll("[data-k]").forEach(i=>i.oninput=()=>{ n[i.dataset.k][+i.dataset.i]=i.value; save(); });
+  $("#nFill").onclick=()=>{ for(const k of ["m","a","e"]){ const j=n[k].findIndex(x=>!x.trim()); if(j>=0){ n[k][j]=n.aff; save(); chk("aff"); man(); return; } } toast("Đã đủ 3-6-9 hôm nay 🎉"); };
+  const addE=()=>{ const v=$("#eNew").value.trim(); if(!v) return; S.evidence.push({id:Date.now(),d:today(),t:v}); save(); man(); toast("Đã ghi ✓"); };
+  $("#eAdd").onclick=addE; $("#eNew").onkeydown=e=>{ if(e.key==="Enter") addE(); };
+  $("#app").querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>{ if(confirm("Xóa bằng chứng này?")){ S.evidence=S.evidence.filter(x=>x.id!=b.dataset.ed); save(); man(); } });
+}
+
+/* ================== TAB: LỘ TRÌNH 12 NGÀY ================== */
+let roadOpen=null, roadEdit=null;
+function road(){
+  const dn=roadDay();
+  if(roadOpen===null) roadOpen = (dn>=1&&dn<=12)? dn-1 : 0;
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>🗺️ Lộ trình 12 ngày</h2>
+    ${S.start? `<p>Bắt đầu: <b>${fmt(S.start)}</b> — hôm nay là ${dn>=1&&dn<=12?`<b>Ngày ${dn}/12</b>`:dn>12?"<b>đã xong 12 ngày</b> 🎉":"trước ngày bắt đầu"}.</p>` : `<p>Chưa bắt đầu.</p>`}
+    <div class="row">
+      <button class="btn" id="rStart">${S.start?"Bắt đầu lại vòng mới từ hôm nay":"Bắt đầu Ngày 1 từ hôm nay"}</button>
+      <button class="btn ghost" id="rReset">Khôi phục nội dung mẫu</button>
+    </div>
+    <p class="muted">Nội dung dưới đây là bản mẫu mình soạn sẵn. Có file lộ trình riêng (Google Drive)? Bấm <b>✏️ Sửa</b> ở từng ngày và dán nội dung của bạn vào — công cụ sẽ dùng nội dung đó mãi về sau.</p>
+  </div>
+  ${S.roadmap.map((r,i)=>{ const isT=dn===i+1; const done=S.roadDone[i];
+    return `<div class="day ${isT?"today":""} ${done?"done":""}">
+      <div class="hd" data-o="${i}"><span><span class="pill ${done?"ok":""}">Ngày ${i+1}${done?" ✓":""}</span> <b>${esc(r.t)}</b> ${isT?'<span class="pill">Hôm nay</span>':""}</span><span>${roadOpen===i?"▲":"▼"}</span></div>
+      ${roadOpen===i? (roadEdit===i? `
+        <label class="sm">Chủ đề</label><input type="text" id="e_t" value="${esc(r.t)}">
+        <label class="sm">Lời nhắn</label><textarea id="e_m" style="min-height:70px">${esc(r.m)}</textarea>
+        <label class="sm">Việc cần làm</label><textarea id="e_task" style="min-height:70px">${esc(r.task)}</textarea>
+        <label class="sm">Câu khẳng định của ngày</label><input type="text" id="e_a" value="${esc(r.a)}">
+        <label class="sm">Câu hỏi nhật ký</label><input type="text" id="e_q" value="${esc(r.q)}">
+        <div class="row" style="margin-top:8px"><button class="btn" id="eSave">Lưu</button><button class="btn ghost" id="eCancel">Hủy</button></div>`
+      : `<p>${esc(r.m)}</p><p><b>Việc cần làm:</b> ${esc(r.task)}</p><p><b>Câu khẳng định:</b> <i>${esc(r.a)}</i> <button class="ico" data-rs="${i}">🔊</button></p><p><b>Câu hỏi nhật ký:</b> ${esc(r.q)}</p>
+        <div class="row"><label class="check" style="border:none"><input type="checkbox" data-rd="${i}" ${done?"checked":""}> Đã hoàn thành ngày này</label>
+        <button class="btn ghost" data-rw="${i}">✍️ Viết nhật ký ngày này</button><button class="btn ghost" data-re="${i}">✏️ Sửa</button></div>`) : ""}
+    </div>`; }).join("")}`;
+  $("#rStart").onclick=()=>{ if(S.start && !confirm("Bắt đầu lại từ Ngày 1 tính từ hôm nay?\n(Nhật ký và các dữ liệu khác vẫn giữ nguyên, chỉ bỏ các dấu ✓ của lộ trình.)")) return; S.start=today(); S.roadDone={}; roadOpen=0; save(); road(); toast("Ngày 1 bắt đầu ✨"); };
+  $("#rReset").onclick=()=>{ if(confirm("Thay toàn bộ nội dung 12 ngày bằng bản mẫu? Những gì bạn đã sửa sẽ mất.")){ S.roadmap=ROADMAP_DEFAULT.map(x=>Object.assign({},x)); save(); road(); } };
+  $("#app").querySelectorAll("[data-o]").forEach(h=>h.onclick=()=>{ const i=+h.dataset.o; roadOpen = roadOpen===i?-1:i; roadEdit=null; road(); });
+  $("#app").querySelectorAll("[data-rs]").forEach(b=>b.onclick=()=>speak(S.roadmap[b.dataset.rs].a,1));
+  $("#app").querySelectorAll("[data-rd]").forEach(c=>c.onchange=()=>{ S.roadDone[c.dataset.rd]=c.checked; if(c.checked && +c.dataset.rd===dn-1) chk("road"); save(); road(); });
+  $("#app").querySelectorAll("[data-rw]").forEach(b=>b.onclick=()=>{ jMode="Nhật ký"; jPrompt=S.roadmap[b.dataset.rw].q; tab="jour"; render(); });
+  $("#app").querySelectorAll("[data-re]").forEach(b=>b.onclick=()=>{ roadEdit=+b.dataset.re; road(); });
+  if($("#eSave")) $("#eSave").onclick=()=>{ const r=S.roadmap[roadEdit]; ["t","m","task","a","q"].forEach(k=>r[k]=$("#e_"+k).value.trim()||r[k]); roadEdit=null; save(); road(); toast("Đã lưu ✓"); };
+  if($("#eCancel")) $("#eCancel").onclick=()=>{ roadEdit=null; road(); };
+}
+
+/* ================== TAB: SAO LƯU ================== */
+function data(){
+  $("#app").innerHTML=`
+  <div class="card">
+    <h2>💾 Dữ liệu của bạn nằm ở đâu?</h2>
+    <p>Mọi thứ bạn viết được lưu <b>ngay trong trình duyệt trên máy này</b>, không gửi đi đâu cả. Nhưng nếu bạn xóa lịch sử/dữ liệu trình duyệt, hoặc đổi máy, dữ liệu sẽ mất.</p>
+    <p>👉 Nên bấm <b>“Tải bản sao lưu”</b> khoảng 1 lần/tuần. File sẽ nằm trong thư mục <b>Downloads (Tải xuống)</b>.</p>
+    <div class="row"><button class="btn" id="dExp">⬇️ Tải bản sao lưu (.json)</button>
+      <label class="btn ghost" style="cursor:pointer">⬆️ Khôi phục từ bản sao lưu<input type="file" id="dImp" accept=".json,application/json" class="hide"></label></div>
+    <p class="muted" style="margin-top:10px">Đang có: ${S.journal.length} bài nhật ký • ${S.myAff.length} câu khẳng định riêng • ${S.favs.length} câu yêu thích • ${S.goals.length} điều ước • ${S.evidence.length} bằng chứng.</p>
+  </div>
+  <div class="card">
+    <h2>⚙️ Cài đặt chế độ đọc toàn màn hình</h2>
+    <label class="sm">Mỗi câu hiện trong bao nhiêu giây (khi không bật đọc to)</label>
+    <select id="dGap">${[4,6,8,10,15].map(s=>`<option value="${s}" ${S.set.gap==s?"selected":""}>${s} giây</option>`).join("")}</select>
+  </div>`;
+  $("#dExp").onclick=()=>{ download("sao-luu-goc-manifest-"+today()+".json", JSON.stringify(S,null,1), "application/json"); toast("Đã tải về thư mục Downloads ✓"); };
+  $("#dImp").onchange=e=>{ const f=e.target.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(!d||typeof d!=="object"||!("journal" in d)) throw 0; if(!confirm("Thay toàn bộ dữ liệu hiện tại bằng bản sao lưu này?\nBản sao lưu có "+(d.journal||[]).length+" bài nhật ký.")) return; localStorage.setItem(KEY, JSON.stringify(d)); S=load(); toast("Đã khôi phục ✓"); data(); }catch(err){ toast("File không đúng định dạng sao lưu"); } }; rd.readAsText(f); };
+  $("#dGap").onchange=e=>{ S.set.gap=+e.target.value; save(); };
+}
+
+save();
+render();
+</script>
+</body>
+</html>
